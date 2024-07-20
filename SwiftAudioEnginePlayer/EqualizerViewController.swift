@@ -90,6 +90,7 @@ class EqualizerViewController: UIViewController {
     }
     
     @IBAction func setPlaylistAction(_ sender: Any) {
+        // 海阔天空、月半小弯曲、墨尔本的秋天、暖一杯茶、奢香夫人
         let urls:[String] = [
             "http://localhost/musics/BEYOND%20-%20%E6%B5%B7%E9%98%94%E5%A4%A9%E7%A9%BA.mp3",
             "http://localhost/musics/%E9%99%88%E4%B9%90%E5%9F%BA%20-%20%E6%9C%88%E5%8D%8A%E5%B0%8F%E5%A4%9C%E6%9B%B2.mp3",

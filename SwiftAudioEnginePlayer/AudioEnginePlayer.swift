@@ -31,7 +31,7 @@ class AudioEnginePlayer {
     private var isPlaying: Bool = false
     private var isPaused: Bool = false
     private var isSeeking: Bool = false
-    private var seekTarget: Int = 0
+    private var seekPosition: Int = 0
     
     /// 播放进度，单位毫秒
     private var playbackProgress: Int = 0
@@ -115,12 +115,12 @@ class AudioEnginePlayer {
         timer.schedule(deadline: .now(), repeating: .milliseconds(100))
         timer.setEventHandler { [weak self] in
             guard let self = self else { return }
-            let currentTime = self.playerNode.current + Double(seekTarget/1000)
+            let currentTime = self.playerNode.current + Double(seekPosition/1000)
             let progress = Int(currentTime * 1000) // 转换为毫秒
-            //print("self.playerNode.current :\(self.playerNode.current) + \(seekTarget/1000) = currentTime: \(currentTime)")
+            //print("self.playerNode.current :\(self.playerNode.current) + \(seekPosition/1000) = currentTime: \(currentTime)")
             DispatchQueue.main.async {
                 if self.isSeeking {
-                    self.playbackProgress = self.seekTarget
+                    self.playbackProgress = self.seekPosition
                     self.isSeeking = false
                 } else {
                     self.playbackProgress = progress
@@ -178,22 +178,8 @@ class AudioEnginePlayer {
         task.resume()
     }
     
-    private func resetBands() {
-        let initialGains: [Float] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] // 重置为初始标准模式的增益值
-        for i in 0..<equalizer.bands.count {
-            equalizer.bands[i].gain = initialGains[i]
-        }
-        restartEngine() // 刷新音频引擎以应用新的增益值
-    }
-    
-    private func resetReverb(){
-        audioEngine.disconnectNodeInput(audioEngine.mainMixerNode)
-        audioEngine.connect(equalizer, to: audioEngine.mainMixerNode, format: nil) // 连接均衡器到主混音器，不使用混响
-        restartEngine()
-    }
-    
     private func handlePlaybackCompletion() {
-        seekTarget = 0
+        seekPosition = 0
         stopProgressUpdateTimer() // 播放完成后停止定时器
         switch loopMode {
         case .single:
@@ -209,6 +195,7 @@ class AudioEnginePlayer {
             print("播放列表为空或索引无效")
             return
         }
+        
         let filePath = playlist[currentTrackIndex];
         play(with: filePath)
     }
@@ -218,6 +205,10 @@ class AudioEnginePlayer {
             print("播放列表为空")
             return
         }
+        if loopMode == .shuffle {
+            playRandomTrack()
+            return
+        }
         currentTrackIndex = (currentTrackIndex + 1) % playlist.count
         playCurrentTrack()
     }
@@ -225,6 +216,10 @@ class AudioEnginePlayer {
     private func playPreviousTrack() {
         guard !playlist.isEmpty else {
             print("播放列表为空")
+            return
+        }
+        if loopMode == .shuffle {
+            playRandomTrack()
             return
         }
         currentTrackIndex = (currentTrackIndex - 1 + playlist.count) % playlist.count
@@ -266,10 +261,13 @@ class AudioEnginePlayer {
         }
         
         do {
-            // 如果当前是暂停状态，跳转后自动播放
+//            if !isPlaying {
+//                playOrPause()
+//            }
             if isPaused || !isPlaying {
                 playerNode.play()
             }
+            
             guard let nodeTime = self.playerNode.lastRenderTime,
                   let playerTime = self.playerNode.playerTime(forNodeTime: nodeTime) else {
                 print("无法获取播放节点时间")
@@ -296,16 +294,11 @@ class AudioEnginePlayer {
             
             // 设置跳转标志位和目标时间
             isSeeking = true
-            seekTarget = milliseconds
-            
-            // 如果当前是暂停状态，跳转后自动播放
-            if isPaused {
-                isPaused = false
-                isPlaying = true
-            }
-            
-            // 开始播放
+            seekPosition = milliseconds
+                    
+            // 开始播放            
             playerNode.play()
+            isPaused = false
             isPlaying = true
             
             // 开始更新播放进度的定时器
@@ -320,16 +313,19 @@ class AudioEnginePlayer {
             playerNode.pause()
             isPaused = true
             isPlaying = false
-            stopProgressUpdateTimer() // 暂停更新播放进度
+            stopProgressUpdateTimer()
         } else if isPaused {
             playerNode.play()
             isPaused = false
             isPlaying = true
-            startProgressUpdateTimer() // 继续更新播放进度
+            startProgressUpdateTimer()
         }
     }
     
     public func stop() {
+        // 停止更新播放进度的定时器
+        stopProgressUpdateTimer()
+        
         // 停止播放节点和音频引擎
         playerNode.stop()
         audioEngine.stop()
@@ -341,11 +337,9 @@ class AudioEnginePlayer {
         // 更新播放状态
         isPlaying = false
         isPaused = false
-        
-        // 停止更新播放进度的定时器
-        stopProgressUpdateTimer()
-        
+
         // 重置播放进度
+        seekPosition = 0
         playbackProgress = 0
         onPlaybackProgressUpdate?(playbackProgress) // 回调重置后的播放进度
     }
@@ -355,6 +349,14 @@ class AudioEnginePlayer {
         currentTrackIndex = 0
         if (autoPlay){
             play(with: urls[currentTrackIndex])
+        }
+    }
+    
+    public func appendToPlaylist(_ url: String, autoPlay:Bool = false){
+        playlist.append(url)
+        if (autoPlay){
+            currentTrackIndex = playlist.count - 1
+            play(with: playlist[currentTrackIndex])
         }
     }
     
@@ -380,7 +382,7 @@ class AudioEnginePlayer {
     
     public func setBandGain(bandIndex: Int, gain: Float) {
         if isPlaying {
-            playerNode.pause()
+            playOrPause()
         }
         guard bandIndex >= 0 && bandIndex < equalizer.bands.count else {
             print("无效的频段索引： \(bandIndex)/\(equalizer.bands.count) \(gain)")
@@ -389,14 +391,15 @@ class AudioEnginePlayer {
         let clampedGain = max(-12.0, min(gain, 12.0)) // 限制增益范围在 -12 dB 到 +12 dB 之间
         equalizer.bands[bandIndex].gain = clampedGain
         restartEngine() // 刷新音频引擎以应用新的增益值
-        if isPlaying {
-            playerNode.play()
+        
+        if !isPlaying {
+            playOrPause()
         }
     }
     
     public func setReverb(id: Int, wetDryMix: Float = 50) {
         if isPlaying {
-            playerNode.pause()
+            playOrPause()
         }
         if let preset = AVAudioUnitReverbPreset(rawValue: id) {
             reverb.loadFactoryPreset(preset)
@@ -413,17 +416,30 @@ class AudioEnginePlayer {
         audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: nil) // 连接混响到主混音器
         
         restartEngine() // 刷新音频引擎以应用新的混响效果
-        if isPlaying {
-            playerNode.play()
+        if !isPlaying {
+            playOrPause()
         }
     }
-    
+
     public func resetAll() {
-        resetBands()
-        resetReverb()
         if isPlaying {
-            playerNode.pause()
-            playerNode.play()
+            playOrPause()
+        }
+        //重置均衡器
+        let initialGains: [Float] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0] // 重置为初始标准模式的增益值
+        for i in 0..<equalizer.bands.count {
+            equalizer.bands[i].gain = initialGains[i]
+        }
+        
+        //取消所有其他效果，只保留均衡器
+        // audioEngine.disconnectNodeInput(audioEngine.mainMixerNode)
+        // audioEngine.connect(equalizer, to: audioEngine.mainMixerNode, format: nil) // 连接均衡器到主混音器，不使用混响
+        
+        //重启引擎
+        restartEngine()
+        
+        if !isPlaying {
+            playOrPause()
         }
     }
     
