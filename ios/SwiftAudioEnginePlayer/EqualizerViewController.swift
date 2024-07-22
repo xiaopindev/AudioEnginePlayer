@@ -23,14 +23,19 @@ class EqualizerViewController: UIViewController {
                 self.slider.maximumValue = Float(self.audioEnginePlayer.totalDuration)
                 self.slider.value = Float(millseconds)
                 self.labPlayProgress.text = "当前播放进度:\(millseconds)/\(self.audioEnginePlayer.totalDuration)"
+                
             }
         }
-        audioEnginePlayer.onPlayIndexChanged = { playIndex in
+        audioEnginePlayer.onPlayingIndexChanged = { playIndex in
             print("playIndex : \(playIndex)")
         }
         
         audioEnginePlayer.onPlayingStatusChanged = { isPlaying in
             print("isPlaying : \(isPlaying)")
+        }
+        
+        audioEnginePlayer.onPlayCompleted = {
+            print("onPlayCompleted");
         }
     }
     
