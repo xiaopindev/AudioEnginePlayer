@@ -104,11 +104,11 @@ class EqualizerViewController: UIViewController {
     @IBAction func setPlaylistAction(_ sender: Any) {
         // 海阔天空、月半小弯曲、墨尔本的秋天、暖一杯茶、奢香夫人
         let urls:[String] = [
-            "http://192.168.1.163/musics/BEYOND%20-%20%E6%B5%B7%E9%98%94%E5%A4%A9%E7%A9%BA.mp3",
-            "http://192.168.1.163/musics/%E9%99%88%E4%B9%90%E5%9F%BA%20-%20%E6%9C%88%E5%8D%8A%E5%B0%8F%E5%A4%9C%E6%9B%B2.mp3",
-            "http://192.168.1.163/musics/%E5%A2%A8%E5%B0%94%E6%9C%AC%E7%9A%84%E7%A7%8B%E5%A4%A9.m4a",
-            "http://192.168.1.163/musics/%E9%82%B5%E5%B8%85-%E6%9A%96%E4%B8%80%E6%9D%AF%E8%8C%B6.mp3",
-            "http://192.168.1.163/musics/%E5%A5%A2%E9%A6%99%E5%A4%AB%E4%BA%BA.m4a",
+            "http://localhost/musics/BEYOND%20-%20%E6%B5%B7%E9%98%94%E5%A4%A9%E7%A9%BA.mp3",
+            "http://localhost/musics/%E9%99%88%E4%B9%90%E5%9F%BA%20-%20%E6%9C%88%E5%8D%8A%E5%B0%8F%E5%A4%9C%E6%9B%B2.mp3",
+            "http://localhost/musics/%E5%A2%A8%E5%B0%94%E6%9C%AC%E7%9A%84%E7%A7%8B%E5%A4%A9.m4a",
+            "http://localhost/musics/%E9%82%B5%E5%B8%85-%E6%9A%96%E4%B8%80%E6%9D%AF%E8%8C%B6.mp3",
+            "http://localhost/musics/%E5%A5%A2%E9%A6%99%E5%A4%AB%E4%BA%BA.m4a",
         ]
         audioEnginePlayer.setPlaylist(urls, autoPlay: true)
     }
@@ -123,6 +123,10 @@ class EqualizerViewController: UIViewController {
     
     @IBAction func volumeChanged(_ sender: UISlider) {
         audioEnginePlayer.setVolume(sender.value)
+    }
+    
+    @IBAction func volumeBVChanged(_ sender: UISlider) {
+        audioEnginePlayer.setVolumeBoost(sender.value)
     }
     
     @IBAction func speedChanged(_ sender: UISlider) {

@@ -26,7 +26,9 @@ class AudioEnginePlayer {
     var isMute : Bool = false
     /// 音量控制，限制音量范围在 0.0 到 1.0 之间
     var volume : Float = 1.0
-    /// 播放速度，限制播放速度范围在 0.5 到 2.0 之间
+    /// 音量增强，限制增益范围在 0 dB 到 24 dB 之间
+    var volumeBV : Float = 0.0
+    /// 播放速度，限制播放速度范围在 0.25 到 4.0 之间
     var speed : Float = 1.0
     /// 当前播放索引
     var currentPlayIndex: Int = 0
@@ -34,13 +36,15 @@ class AudioEnginePlayer {
     var isPlaying: Bool = false
     
     //MARK: Private Property
+    private var audioFile: AVAudioFile?
+
     private var audioEngine: AVAudioEngine
+    private var playerNode: AVAudioPlayerNode
+    private var varispeed: AVAudioUnitVarispeed
+    private var volumeBooster: AVAudioUnitEQ // 新增音量放大器
     private var equalizer: AVAudioUnitEQ
     private var reverb: AVAudioUnitReverb
     
-    private var playerNode: AVAudioPlayerNode
-    private var audioFile: AVAudioFile?
-
     private var isPaused: Bool = false
     private var isSeeking: Bool = false
     /// 单位：毫秒
@@ -57,6 +61,8 @@ class AudioEnginePlayer {
     init() {
         playerNode = AVAudioPlayerNode()
         audioEngine = AVAudioEngine()
+        varispeed = AVAudioUnitVarispeed()
+        volumeBooster = AVAudioUnitEQ(numberOfBands: 1) // 初始化音量放大器
         equalizer = AVAudioUnitEQ(numberOfBands: 10)
         reverb = AVAudioUnitReverb()
         initEqualizer()
@@ -67,10 +73,14 @@ class AudioEnginePlayer {
     
     private func setupAudioEngine() {
         audioEngine.attach(playerNode)
+        audioEngine.attach(varispeed)
+        audioEngine.attach(volumeBooster) // 附加音量放大器
         audioEngine.attach(equalizer)
         audioEngine.attach(reverb)
         
-        audioEngine.connect(playerNode, to: equalizer, format: nil)
+        audioEngine.connect(playerNode, to: varispeed, format: nil)
+        audioEngine.connect(varispeed, to: volumeBooster, format: nil)
+        audioEngine.connect(volumeBooster, to: equalizer, format: nil)
         audioEngine.connect(equalizer, to: audioEngine.mainMixerNode, format: nil)
         
         do {
@@ -102,6 +112,14 @@ class AudioEnginePlayer {
             band.gain = initialGains[i]
             band.bypass = false
         }
+
+        // 初始化音量放大器
+        let boosterBand = volumeBooster.bands[0]
+        boosterBand.filterType = .parametric
+        boosterBand.frequency = 1000 // 中频
+        boosterBand.bandwidth = 1.0
+        boosterBand.gain = 0 // 初始增益为0
+        boosterBand.bypass = false
     }
     
     private func loadAndPlayAudioFile(from url: URL) {
@@ -357,7 +375,6 @@ class AudioEnginePlayer {
         playerNode.pause()
         isPaused = true
         isPlaying = false
-        onPlayingStatusChanged?(false)
         stopProgressUpdateTimer()
     }
     
@@ -385,6 +402,7 @@ class AudioEnginePlayer {
     }
     
     public func setPlaylist(_ urls: [String], autoPlay:Bool = true) {
+        stop()
         playlist = urls
         currentPlayIndex = 0
         if (autoPlay){
@@ -457,9 +475,9 @@ class AudioEnginePlayer {
     }
     
     public func setSpeed(_ speed: Float) {
-        let clampedRate = max(0.5, min(speed, 2.0)) // 限制播放速度范围在 0.5 到 2.0 之间
+        let clampedRate = max(0.25, min(speed, 4.0)) // 限制播放速度范围在 0.25 到 4.0 之间
         self.speed = clampedRate
-        playerNode.rate = clampedRate
+        varispeed.rate = clampedRate
         print("播放速度设置为：\(clampedRate)")
     }
 
@@ -513,18 +531,30 @@ class AudioEnginePlayer {
         let clampedMix = max(0.0, min(wetDryMix, 100.0)) // 限制混响范围在 0% 到 100% 之间
         reverb.wetDryMix = clampedMix
                 
+        audioEngine.disconnectNodeInput(varispeed)
+        audioEngine.disconnectNodeOutput(varispeed)
+        audioEngine.disconnectNodeInput(volumeBooster)
+        audioEngine.disconnectNodeOutput(volumeBooster)
         audioEngine.disconnectNodeInput(equalizer)
         audioEngine.disconnectNodeOutput(equalizer)
         audioEngine.disconnectNodeInput(reverb)
         audioEngine.disconnectNodeOutput(reverb)
 
-        audioEngine.connect(playerNode, to: equalizer, format: nil)
+        audioEngine.connect(playerNode, to: varispeed, format: nil)
+        audioEngine.connect(varispeed, to: volumeBooster, format: nil)
+        audioEngine.connect(volumeBooster, to: equalizer, format: nil)
         audioEngine.connect(equalizer, to: reverb, format: nil)
         audioEngine.connect(reverb, to: audioEngine.mainMixerNode, format: nil)
         
         restartEngine()
         
         self.seekTo(milliseconds: recordTime)
+    }
+
+    public func setVolumeBoost(_ gain: Float) {
+        let clampedGain = max(0.0, min(gain, 24.0)) // 限制增益范围在 0 dB 到 24 dB 之间
+        volumeBooster.bands[0].gain = clampedGain
+        print("音量放大器增益设置为：\(clampedGain) dB")
     }
 
     public func resetAll() {
@@ -538,12 +568,18 @@ class AudioEnginePlayer {
             equalizer.bands[i].gain = initialGains[i]
         }
         
+        audioEngine.disconnectNodeInput(varispeed)
+        audioEngine.disconnectNodeOutput(varispeed)
+        audioEngine.disconnectNodeInput(volumeBooster)
+        audioEngine.disconnectNodeOutput(volumeBooster)
         audioEngine.disconnectNodeInput(equalizer)
         audioEngine.disconnectNodeOutput(equalizer)
         audioEngine.disconnectNodeInput(reverb)
         audioEngine.disconnectNodeOutput(reverb)
         
-        audioEngine.connect(playerNode, to: equalizer, format: nil)
+        audioEngine.connect(playerNode, to: varispeed, format: nil)
+        audioEngine.connect(varispeed, to: volumeBooster, format: nil)
+        audioEngine.connect(volumeBooster, to: equalizer, format: nil)
         audioEngine.connect(equalizer, to: audioEngine.mainMixerNode, format: nil)
         
         restartEngine()
