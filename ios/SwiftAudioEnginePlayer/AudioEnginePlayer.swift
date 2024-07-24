@@ -531,6 +531,11 @@ class AudioEnginePlayer {
         print("静音状态为：\(isMute)")
     }
     
+    public func setEnableFadeEffect(_ value: Bool) {
+        self.enableFadeEffect = value
+        print("是否启用淡入淡出：\(value)")
+    }
+    
     public func setLoopMode(_ mode: LoopMode) {
         loopMode = mode
         print("切换到：\(loopMode)")
