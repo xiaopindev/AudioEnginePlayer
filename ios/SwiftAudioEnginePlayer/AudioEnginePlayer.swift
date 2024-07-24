@@ -24,6 +24,8 @@ class AudioEnginePlayer {
     var totalDuration: Int = 0
     /// 是否静音
     var isMute : Bool = false
+    /// 是否启用淡入淡出效果
+    var enableFadeEffect: Bool = true
     /// 音量控制，限制音量范围在 0.0 到 1.0 之间
     var volume : Float = 1.0
     /// 音量增强，限制增益范围在 0 dB 到 24 dB 之间
@@ -270,6 +272,24 @@ class AudioEnginePlayer {
         currentPlayIndex = Int.random(in: 0..<playlist.count)
         playCurrentTrack()
     }
+
+    private func fadeVolume(to targetVolume: Float, duration: TimeInterval, completion: (() -> Void)? = nil) {
+        let steps = 50
+        let stepDuration = duration / Double(steps)
+        let currentVolume = self.playerNode.volume
+        let volumeStep = (targetVolume - currentVolume) / Float(steps)
+        
+        //print("current: \(currentVolume) targetVolume:\(targetVolume)")
+
+        for step in 0...steps {
+            DispatchQueue.main.asyncAfter(deadline: .now() + stepDuration * Double(step)) {
+                self.playerNode.volume = currentVolume + volumeStep * Float(step)
+                if step == steps {
+                    completion?()
+                }
+            }
+        }
+    }
     
     //MARK: Public Methods
     public func play(with filePath: String) {
@@ -359,15 +379,32 @@ class AudioEnginePlayer {
     
     public func playOrPause() {
         if isPlaying {
-            playerNode.pause()
-            isPaused = true
-            isPlaying = false
-            stopProgressUpdateTimer()
+            if enableFadeEffect {
+                fadeVolume(to: 0.0, duration: 2.0) { // 淡出
+                    self.playerNode.pause()
+                    self.isPaused = true
+                    self.isPlaying = false
+                    self.stopProgressUpdateTimer()
+                }
+            } else {
+                self.playerNode.pause()
+                self.isPaused = true
+                self.isPlaying = false
+                self.stopProgressUpdateTimer()
+            }
         } else if isPaused {
-            playerNode.play()
-            isPaused = false
-            isPlaying = true
-            startProgressUpdateTimer()
+            if enableFadeEffect {
+                self.playerNode.play()
+                self.isPaused = false
+                self.isPlaying = true
+                self.startProgressUpdateTimer()
+                fadeVolume(to: self.volume, duration: 2.0) // 淡入
+            } else {
+                self.playerNode.play()
+                self.isPaused = false
+                self.isPlaying = true
+                self.startProgressUpdateTimer()
+            }
         }
     }
     
