@@ -70,13 +70,6 @@ class EqualizerViewController: UIViewController {
         }
     }
     
-    //播放歌曲
-    @IBAction func playAction(_ sender: Any) {
-        // 播放在线音乐
-        let audioUrl = "http://localhost/musics/%E9%99%88%E4%B9%90%E5%9F%BA%20-%20%E6%9C%88%E5%8D%8A%E5%B0%8F%E5%A4%9C%E6%9B%B2.mp3"
-        audioEnginePlayer.play(with: audioUrl)
-    }
-    
     @IBAction func pauseAction(_ sender: Any) {
         audioEnginePlayer.playOrPause()
     }
@@ -103,14 +96,35 @@ class EqualizerViewController: UIViewController {
     
     @IBAction func setPlaylistAction(_ sender: Any) {
         // 海阔天空、月半小弯曲、墨尔本的秋天、暖一杯茶、奢香夫人
-        let urls:[String] = [
-            "http://localhost/musics/BEYOND%20-%20%E6%B5%B7%E9%98%94%E5%A4%A9%E7%A9%BA.mp3",
-            "http://localhost/musics/%E9%99%88%E4%B9%90%E5%9F%BA%20-%20%E6%9C%88%E5%8D%8A%E5%B0%8F%E5%A4%9C%E6%9B%B2.mp3",
-            "http://localhost/musics/%E5%A2%A8%E5%B0%94%E6%9C%AC%E7%9A%84%E7%A7%8B%E5%A4%A9.m4a",
-            "http://localhost/musics/%E9%82%B5%E5%B8%85-%E6%9A%96%E4%B8%80%E6%9D%AF%E8%8C%B6.mp3",
-            "http://localhost/musics/%E5%A5%A2%E9%A6%99%E5%A4%AB%E4%BA%BA.m4a",
+        let tracks: [TrackModel] = [
+            TrackModel(source: "http://192.168.1.163/musics/BEYOND%20-%20%E6%B5%B7%E9%98%94%E5%A4%A9%E7%A9%BA.mp3",
+                       title: "海阔天空",
+                       artist: "BEYOND",
+                       album: "乐与怒",
+                       albumArt: nil),
+            TrackModel(source: "http://192.168.1.163/musics/%E9%99%88%E4%B9%90%E5%9F%BA%20-%20%E6%9C%88%E5%8D%8A%E5%B0%8F%E5%A4%9C%E6%9B%B2.mp3",
+                       title: "月半小夜曲",
+                       artist: "陈乐基",
+                       album: "月半小夜曲",
+                       albumArt: nil),
+            TrackModel(source: "http://192.168.1.163/musics/%E5%A2%A8%E5%B0%94%E6%9C%AC%E7%9A%84%E7%A7%8B%E5%A4%A9.m4a",
+                       title: "墨尔本的秋天",
+                       artist: "未知艺术家",
+                       album: "未知专辑",
+                       albumArt: nil),
+            TrackModel(source: "http://192.168.1.163/musics/%E9%82%B5%E5%B8%85-%E6%9A%96%E4%B8%80%E6%9D%AF%E8%8C%B6.mp3",
+                       title: "暖一杯茶",
+                       artist: "邵帅",
+                       album: "暖一杯茶",
+                       albumArt: nil),
+            TrackModel(source: "http://192.168.1.163/musics/%E5%A5%A2%E9%A6%99%E5%A4%AB%E4%BA%BA.m4a",
+                       title: "奢香夫人",
+                       artist: "未知艺术家",
+                       album: "未知专辑",
+                       albumArt: nil)
         ]
-        audioEnginePlayer.setPlaylist(urls, autoPlay: true)
+        
+        audioEnginePlayer.setPlaylist(tracks, autoPlay: true)
     }
     
     @IBAction func sliderChanged(_ sender: UISlider) {
