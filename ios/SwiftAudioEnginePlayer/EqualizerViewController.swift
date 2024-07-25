@@ -11,6 +11,7 @@ import AVFoundation
 class EqualizerViewController: UIViewController {
     lazy var audioEnginePlayer = AudioEnginePlayer()
     
+    @IBOutlet weak var btnPlayOrPause: UIButton!
     @IBOutlet weak var slider: UISlider!
     @IBOutlet weak var labPlayProgress: UILabel!
     
@@ -30,13 +31,17 @@ class EqualizerViewController: UIViewController {
             print("playIndex : \(playIndex)")
         }
         
-        audioEnginePlayer.onPlayingStatusChanged = { isPlaying in
+        audioEnginePlayer.onPlayingStatusChanged = { [weak self] isPlaying in
             print("isPlaying : \(isPlaying)")
+            DispatchQueue.main.async {
+                self?.btnPlayOrPause.setTitle(isPlaying ? "暂停" : "播放", for: .normal)
+            }
         }
         
         audioEnginePlayer.onPlayCompleted = {
             print("onPlayCompleted");
         }
+        
     }
     
     //均衡器设置

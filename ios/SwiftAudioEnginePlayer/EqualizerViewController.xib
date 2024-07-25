@@ -11,6 +11,7 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EqualizerViewController" customModule="SwiftAudioEnginePlayer" customModuleProvider="target">
             <connections>
+                <outlet property="btnPlayOrPause" destination="jhm-31-3yp" id="rg3-PD-R7d"/>
                 <outlet property="labPlayProgress" destination="Gkr-4F-q4V" id="hcm-GZ-Ym3"/>
                 <outlet property="slider" destination="fLC-au-fvD" id="GW2-Zp-ug5"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
