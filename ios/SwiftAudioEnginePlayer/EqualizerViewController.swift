@@ -32,7 +32,7 @@ class EqualizerViewController: UIViewController {
         }
         
         audioEnginePlayer.onPlayingStatusChanged = { [weak self] isPlaying in
-            print("isPlaying : \(isPlaying)")
+            print("onPlayingStatusChanged isPlaying : \(isPlaying)")
             DispatchQueue.main.async {
                 self?.btnPlayOrPause.setTitle(isPlaying ? "暂停" : "播放", for: .normal)
             }
