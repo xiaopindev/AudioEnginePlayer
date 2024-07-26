@@ -9,6 +9,7 @@ import UIKit
 import AVFoundation
 
 class EqualizerViewController: UIViewController {
+    private var visualizerView: VisualizerView!
     lazy var audioEnginePlayer = AudioEnginePlayer()
     
     @IBOutlet weak var btnPlayOrPause: UIButton!
@@ -17,6 +18,15 @@ class EqualizerViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        visualizerView = VisualizerView(frame: CGRectMake(0, 0, view.bounds.width, 300))
+        view.addSubview(visualizerView)
+        view.sendSubviewToBack(visualizerView)
+        
+        audioEnginePlayer.onSpectrumDataAvailable = { [weak self] magnitudes in
+            //print(magnitudes)
+            self?.visualizerView.update(with: magnitudes)
+        }
+        
         audioEnginePlayer.onPlaybackProgressUpdate = { [weak self] millseconds in
             guard let self = self else { return }
             DispatchQueue.main.async {

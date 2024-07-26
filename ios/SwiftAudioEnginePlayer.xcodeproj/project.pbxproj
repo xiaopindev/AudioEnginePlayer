@@ -15,6 +15,8 @@
 		B21B8CFE2C538EC5009574E1 /* AppIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8CFD2C538EC5009574E1 /* AppIntent.swift */; };
 		B21B8D002C538EC6009574E1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B21B8CFF2C538EC6009574E1 /* Assets.xcassets */; };
 		B21B8D042C538EC6009574E1 /* WidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B21B8CF02C538EC5009574E1 /* WidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		B21B8D0A2C53DEF2009574E1 /* SpectrumAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D092C53DEF2009574E1 /* SpectrumAnalyzer.swift */; };
+		B21B8D0C2C53DFDA009574E1 /* VisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D0B2C53DFDA009574E1 /* VisualizerView.swift */; };
 		B2E73E132C47B34500C6F608 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E73E122C47B34500C6F608 /* AppDelegate.swift */; };
 		B2E73E152C47B34500C6F608 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E73E142C47B34500C6F608 /* SceneDelegate.swift */; };
 		B2E73E172C47B34500C6F608 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E73E162C47B34500C6F608 /* ViewController.swift */; };
@@ -60,6 +62,8 @@
 		B21B8CFD2C538EC5009574E1 /* AppIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntent.swift; sourceTree = "<group>"; };
 		B21B8CFF2C538EC6009574E1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B21B8D012C538EC6009574E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B21B8D092C53DEF2009574E1 /* SpectrumAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrumAnalyzer.swift; sourceTree = "<group>"; };
+		B21B8D0B2C53DFDA009574E1 /* VisualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizerView.swift; sourceTree = "<group>"; };
 		B2E73E0F2C47B34500C6F608 /* SwiftAudioEnginePlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftAudioEnginePlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2E73E122C47B34500C6F608 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B2E73E142C47B34500C6F608 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -141,6 +145,8 @@
 				B2E73E142C47B34500C6F608 /* SceneDelegate.swift */,
 				B2E73E162C47B34500C6F608 /* ViewController.swift */,
 				B2E73E2F2C47FEFC00C6F608 /* AudioEnginePlayer.swift */,
+				B21B8D092C53DEF2009574E1 /* SpectrumAnalyzer.swift */,
+				B21B8D0B2C53DFDA009574E1 /* VisualizerView.swift */,
 				B2E73E282C47B36900C6F608 /* EqualizerViewController.swift */,
 				B2E73E292C47B36900C6F608 /* EqualizerViewController.xib */,
 				B2E73E182C47B34500C6F608 /* Main.storyboard */,
@@ -268,7 +274,9 @@
 				B2E73E172C47B34500C6F608 /* ViewController.swift in Sources */,
 				B2E73E2C2C47B36900C6F608 /* EqualizerViewController.swift in Sources */,
 				B2E73E132C47B34500C6F608 /* AppDelegate.swift in Sources */,
+				B21B8D0C2C53DFDA009574E1 /* VisualizerView.swift in Sources */,
 				B2E73E302C47FEFD00C6F608 /* AudioEnginePlayer.swift in Sources */,
+				B21B8D0A2C53DEF2009574E1 /* SpectrumAnalyzer.swift in Sources */,
 				B2E73E152C47B34500C6F608 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
