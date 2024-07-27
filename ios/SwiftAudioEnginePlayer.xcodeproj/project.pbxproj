@@ -17,6 +17,12 @@
 		B21B8D042C538EC6009574E1 /* WidgetsExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = B21B8CF02C538EC5009574E1 /* WidgetsExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		B21B8D0A2C53DEF2009574E1 /* SpectrumAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D092C53DEF2009574E1 /* SpectrumAnalyzer.swift */; };
 		B21B8D0C2C53DFDA009574E1 /* VisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D0B2C53DFDA009574E1 /* VisualizerView.swift */; };
+		B21B8D132C54A34B009574E1 /* PlayerSmallWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D112C54911E009574E1 /* PlayerSmallWidget.swift */; };
+		B21B8D162C54A3AC009574E1 /* MusicEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D152C54A3AC009574E1 /* MusicEntry.swift */; };
+		B21B8D192C54A423009574E1 /* SwiftUIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D0F2C548E2B009574E1 /* SwiftUIExtensions.swift */; };
+		B21B8D1C2C54D1F5009574E1 /* AppGroupsShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D1B2C54D1F5009574E1 /* AppGroupsShared.swift */; };
+		B21B8D1D2C54D433009574E1 /* AppGroupsShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D1B2C54D1F5009574E1 /* AppGroupsShared.swift */; };
+		B21B8D1F2C54E5EB009574E1 /* PlayerMediumWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = B21B8D1E2C54E5EB009574E1 /* PlayerMediumWidget.swift */; };
 		B2E73E132C47B34500C6F608 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E73E122C47B34500C6F608 /* AppDelegate.swift */; };
 		B2E73E152C47B34500C6F608 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E73E142C47B34500C6F608 /* SceneDelegate.swift */; };
 		B2E73E172C47B34500C6F608 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E73E162C47B34500C6F608 /* ViewController.swift */; };
@@ -64,6 +70,11 @@
 		B21B8D012C538EC6009574E1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B21B8D092C53DEF2009574E1 /* SpectrumAnalyzer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpectrumAnalyzer.swift; sourceTree = "<group>"; };
 		B21B8D0B2C53DFDA009574E1 /* VisualizerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VisualizerView.swift; sourceTree = "<group>"; };
+		B21B8D0F2C548E2B009574E1 /* SwiftUIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIExtensions.swift; sourceTree = "<group>"; };
+		B21B8D112C54911E009574E1 /* PlayerSmallWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerSmallWidget.swift; sourceTree = "<group>"; };
+		B21B8D152C54A3AC009574E1 /* MusicEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicEntry.swift; sourceTree = "<group>"; };
+		B21B8D1B2C54D1F5009574E1 /* AppGroupsShared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppGroupsShared.swift; sourceTree = "<group>"; };
+		B21B8D1E2C54E5EB009574E1 /* PlayerMediumWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerMediumWidget.swift; sourceTree = "<group>"; };
 		B2E73E0F2C47B34500C6F608 /* SwiftAudioEnginePlayer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftAudioEnginePlayer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2E73E122C47B34500C6F608 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B2E73E142C47B34500C6F608 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -113,8 +124,13 @@
 				B21B8CF92C538EC5009574E1 /* WidgetsLiveActivity.swift */,
 				B21B8CFB2C538EC5009574E1 /* Widgets.swift */,
 				B21B8CFD2C538EC5009574E1 /* AppIntent.swift */,
+				B21B8D1B2C54D1F5009574E1 /* AppGroupsShared.swift */,
+				B21B8D152C54A3AC009574E1 /* MusicEntry.swift */,
+				B21B8D112C54911E009574E1 /* PlayerSmallWidget.swift */,
+				B21B8D1E2C54E5EB009574E1 /* PlayerMediumWidget.swift */,
 				B21B8CFF2C538EC6009574E1 /* Assets.xcassets */,
 				B21B8D012C538EC6009574E1 /* Info.plist */,
+				B21B8D0F2C548E2B009574E1 /* SwiftUIExtensions.swift */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -260,9 +276,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B21B8D1C2C54D1F5009574E1 /* AppGroupsShared.swift in Sources */,
 				B21B8CFA2C538EC5009574E1 /* WidgetsLiveActivity.swift in Sources */,
 				B21B8CFE2C538EC5009574E1 /* AppIntent.swift in Sources */,
 				B21B8CFC2C538EC5009574E1 /* Widgets.swift in Sources */,
+				B21B8D132C54A34B009574E1 /* PlayerSmallWidget.swift in Sources */,
+				B21B8D1F2C54E5EB009574E1 /* PlayerMediumWidget.swift in Sources */,
+				B21B8D192C54A423009574E1 /* SwiftUIExtensions.swift in Sources */,
+				B21B8D162C54A3AC009574E1 /* MusicEntry.swift in Sources */,
 				B21B8CF82C538EC5009574E1 /* WidgetsBundle.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,6 +292,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B21B8D1D2C54D433009574E1 /* AppGroupsShared.swift in Sources */,
 				B2E73E172C47B34500C6F608 /* ViewController.swift in Sources */,
 				B2E73E2C2C47B36900C6F608 /* EqualizerViewController.swift in Sources */,
 				B2E73E132C47B34500C6F608 /* AppDelegate.swift in Sources */,
@@ -323,6 +345,7 @@
 				INFOPLIST_FILE = Widgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -350,6 +373,7 @@
 				INFOPLIST_FILE = Widgets/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Widgets;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -500,7 +524,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -530,7 +554,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

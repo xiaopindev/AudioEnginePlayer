@@ -29,12 +29,12 @@ class EqualizerViewController: UIViewController {
         
         audioEnginePlayer.onPlaybackProgressUpdate = { [weak self] millseconds in
             guard let self = self else { return }
+            //print("millseconds \(millseconds)")
             DispatchQueue.main.async {
                 self.slider.minimumValue = 0
                 self.slider.maximumValue = Float(self.audioEnginePlayer.totalDuration)
                 self.slider.value = Float(millseconds)
                 self.labPlayProgress.text = "当前播放进度:\(millseconds)/\(self.audioEnginePlayer.totalDuration)"
-                
             }
         }
         audioEnginePlayer.onPlayingIndexChanged = { playIndex in

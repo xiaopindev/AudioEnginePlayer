@@ -33,6 +33,6 @@ class VisualizerView: UIView {
         }
 
         // 添加调试日志
-        print("Drawing \(magnitudes.count) bars")
+        //print("Drawing \(magnitudes.count) bars")
     }
 }

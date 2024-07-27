@@ -171,7 +171,7 @@ class AudioEnginePlayer {
             let magnitudes = self.spectrumAnalyzer.analyze(buffer: buffer)
             DispatchQueue.main.async {
                 if self.isPlaying {
-                    print("\(magnitudes)\n\n\n")
+                    //print("\(magnitudes)\n\n\n")
                     self.onSpectrumDataAvailable?(magnitudes)
                 }
             }
@@ -282,11 +282,8 @@ class AudioEnginePlayer {
             //print("self.playerNode.current :\(self.playerNode.current) + \(seekPosition/1000) = currentTime: \(currentTime)")
             //print("PlayerNode isPlayer = \(self.playerNode.isPlaying)")
             DispatchQueue.main.async {
-                if self.seekPosition > 0 {
-                    self.playbackProgress = self.seekPosition
-                } else {
-                    self.playbackProgress = progress
-                }
+                self.playbackProgress = progress
+                //print("self.playbackProgress \(self.playbackProgress)")
                 self.onPlaybackProgressUpdate?(self.playbackProgress)
                 if self.playbackProgress >= self.totalDuration {
                     self.stopProgressUpdateTimer()

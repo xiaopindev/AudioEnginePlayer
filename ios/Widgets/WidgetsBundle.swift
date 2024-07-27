@@ -11,7 +11,9 @@ import SwiftUI
 @main
 struct WidgetsBundle: WidgetBundle {
     var body: some Widget {
-        Widgets()
-        WidgetsLiveActivity()
+        PlayerSmallWidget()
+        PlayerMediumWidget()
+        //Widgets()
+        //WidgetsLiveActivity()
     }
 }

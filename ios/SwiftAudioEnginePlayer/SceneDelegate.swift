@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import WidgetKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -22,6 +23,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let vc = EqualizerViewController()
         window?.rootViewController = vc
         window?.makeKeyAndVisible()
+    }
+    
+    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+        guard let urlContext = URLContexts.first else { return }
+        let url = urlContext.url
+        
+        // 处理URL Scheme
+        if url.scheme == "myapp" {
+            handleCustomURL(url)
+        }
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
@@ -52,6 +63,32 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // to restore the scene back to its current state.
     }
 
-
+    private func handleCustomURL(_ url: URL) {
+        // 解析URL并执行相应的操作
+        if let action = url.host {
+            switch action {
+            case "prev":
+                // 执行上一首操作
+                print("Previous track")
+                // 在这里添加你的逻辑来处理上一首操作
+                break
+            case "togglePlayPause":
+                // 执行播放/暂停操作
+                print("Toggle play/pause")
+                // 在这里添加你的逻辑来处理播放/暂停操作
+                break
+            case "next":
+                // 执行下一首操作
+                print("Next track")
+                // 在这里添加你的逻辑来处理下一首操作
+                break
+            default:
+                break
+            }
+        }
+        
+        // 手动刷新Timeline
+        WidgetCenter.shared.reloadAllTimelines()
+    }
 }
 
